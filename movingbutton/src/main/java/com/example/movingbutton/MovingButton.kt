@@ -8,7 +8,6 @@ import android.view.View
 import com.example.movingbutton.enums.ButtonPosition
 import com.example.movingbutton.enums.MoveDirection
 import com.example.movingbutton.utils.AudioUtil.playKeyClickSound
-import com.example.movingbutton.utils.VibrateUtil.vibtate
 import com.nineoldandroids.view.ViewHelper
 import kotlin.math.abs
 import kotlin.math.asin
@@ -351,7 +350,6 @@ class MovingButton : androidx.appcompat.widget.AppCompatButton {
     }
 
     private fun soundAndVibrate() {
-        vibtate(context, vibrationDuration)
         playKeyClickSound(context, eventVolume)
     }
 
