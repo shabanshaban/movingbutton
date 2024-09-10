@@ -11,7 +11,7 @@ publishing {
             from components.findByName('release')
             groupId='com.github.shabanshaban'
             artifactId = 'movingbutton'
-            version = '1.0.2'
+            version = '1.0.3'
 
 
         }
