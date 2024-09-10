@@ -1,5 +1,6 @@
 package com.example.movingbutton
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -99,77 +100,83 @@ class MovingButton : androidx.appcompat.widget.AppCompatButton {
     private var centerX = 0f
     private var centerY = 0f
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                requestTouchEvent()
-                positionChanged(MotionEvent.ACTION_DOWN, ButtonPosition.ORIGIN)
-                soundAndVibrate()
-                halfWidth = this.width.toFloat() / 2.0f
-                halfHeight = this.height.toFloat() / 2.0f
-                currentPosition = ButtonPosition.ORIGIN
-            }
+        try {
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    requestTouchEvent()
+                    positionChanged(MotionEvent.ACTION_DOWN, ButtonPosition.ORIGIN)
+                    soundAndVibrate()
+                    halfWidth = this.width.toFloat() / 2.0f
+                    halfHeight = this.height.toFloat() / 2.0f
+                    currentPosition = ButtonPosition.ORIGIN
+                }
 
-            MotionEvent.ACTION_MOVE -> {
-                recalculateCenter()
-                val diffX = event.x - centerX
-                val diffY = centerY - event.y
+                MotionEvent.ACTION_MOVE -> {
+                    recalculateCenter()
+                    val diffX = event.x - centerX
+                    val diffY = centerY - event.y
 
-                when (moveDirection) {
-                    MoveDirection.ALL -> {
-                        val length = sqrt(diffX.pow(2.0f) + diffY.pow(2.0f))
-                        if (length > offSetOuter) if (currentPosition == ButtonPosition.ORIGIN) moveView(
-                            this, getPositionForAll(diffX.toDouble(), diffY.toDouble())
+                    when (moveDirection) {
+                        MoveDirection.ALL -> {
+                            val length = sqrt(diffX.pow(2.0f) + diffY.pow(2.0f))
+                            if (length > offSetOuter) if (currentPosition == ButtonPosition.ORIGIN) moveView(
+                                this, getPositionForAll(diffX.toDouble(), diffY.toDouble())
+                            )
+                            else moveView(
+                                this,
+                                getDetailedPositionForAll(diffX.toDouble(), diffY.toDouble())
+                            )
+                            else if (length < offSetInner) moveView(this, ButtonPosition.ORIGIN)
+                        }
+
+                        MoveDirection.HORIZONTAL_VERTICAL -> {
+                            val length = sqrt(diffX.pow(2.0f) + diffY.pow(2.0f))
+                            if (length > offSetOuter) if (currentPosition == ButtonPosition.ORIGIN) moveView(
+                                this, getPositionForHV(diffX.toDouble(), diffY.toDouble())
+                            )
+                            else moveView(
+                                this,
+                                getDetailedPositionForHV(diffX.toDouble(), diffY.toDouble())
+                            )
+                            else if (length < offSetInner) moveView(this, ButtonPosition.ORIGIN)
+                        }
+
+                        MoveDirection.VERTICAL -> if (diffY > offSetOuter) moveView(
+                            this, ButtonPosition.UP
                         )
-                        else moveView(
+                        else if (diffY < -offSetOuter) moveView(this, ButtonPosition.DOWN)
+                        else if (abs(diffY.toDouble()) < offSetInner) moveView(
                             this,
-                            getDetailedPositionForAll(diffX.toDouble(), diffY.toDouble())
+                            ButtonPosition.ORIGIN
                         )
-                        else if (length < offSetInner) moveView(this, ButtonPosition.ORIGIN)
-                    }
 
-                    MoveDirection.HORIZONTAL_VERTICAL -> {
-                        val length = sqrt(diffX.pow(2.0f) + diffY.pow(2.0f))
-                        if (length > offSetOuter) if (currentPosition == ButtonPosition.ORIGIN) moveView(
-                            this, getPositionForHV(diffX.toDouble(), diffY.toDouble())
+                        MoveDirection.HORIZONTAL -> if (diffX > offSetOuter) moveView(
+                            this, ButtonPosition.RIGHT
                         )
-                        else moveView(
+                        else if (diffX < -offSetOuter) moveView(this, ButtonPosition.LEFT)
+                        else if (abs(diffX.toDouble()) < offSetInner) moveView(
                             this,
-                            getDetailedPositionForHV(diffX.toDouble(), diffY.toDouble())
+                            ButtonPosition.ORIGIN
                         )
-                        else if (length < offSetInner) moveView(this, ButtonPosition.ORIGIN)
-                    }
 
-                    MoveDirection.VERTICAL -> if (diffY > offSetOuter) moveView(
-                        this, ButtonPosition.UP
-                    )
-                    else if (diffY < -offSetOuter) moveView(this, ButtonPosition.DOWN)
-                    else if (abs(diffY.toDouble()) < offSetInner) moveView(
-                        this,
-                        ButtonPosition.ORIGIN
-                    )
+                        MoveDirection.STILL -> {}
+                        else -> {
 
-                    MoveDirection.HORIZONTAL -> if (diffX > offSetOuter) moveView(
-                        this, ButtonPosition.RIGHT
-                    )
-                    else if (diffX < -offSetOuter) moveView(this, ButtonPosition.LEFT)
-                    else if (abs(diffX.toDouble()) < offSetInner) moveView(
-                        this,
-                        ButtonPosition.ORIGIN
-                    )
-
-                    MoveDirection.STILL -> {}
-                    else -> {
-
+                        }
                     }
                 }
-            }
 
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                moveView(this, ButtonPosition.ORIGIN)
-                positionChanged(MotionEvent.ACTION_UP, ButtonPosition.ORIGIN)
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    moveView(this, ButtonPosition.ORIGIN)
+                    positionChanged(MotionEvent.ACTION_UP, ButtonPosition.ORIGIN)
+                }
             }
+        }catch (e:Exception){
+            e.fillInStackTrace()
         }
+
         return super.onTouchEvent(event)
     }
 
