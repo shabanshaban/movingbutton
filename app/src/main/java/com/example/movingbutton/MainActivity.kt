@@ -9,6 +9,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
       val movingButton=  findViewById<MovingButton>(R.id.moving_button)
         movingButton.onPositionChangedListener=object :MovingButton.OnPositionChangedListener{
             override fun onPositionChanged(action: Int, position: ButtonPosition?) {
