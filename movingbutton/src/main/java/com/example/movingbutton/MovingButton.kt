@@ -8,7 +8,6 @@ import android.view.View
 import com.example.movingbutton.enums.ButtonPosition
 import com.example.movingbutton.enums.MoveDirection
 import com.example.movingbutton.utils.AudioUtil.playKeyClickSound
-import com.nineoldandroids.view.ViewHelper
 import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.pow
@@ -283,8 +282,10 @@ class MovingButton : androidx.appcompat.widget.AppCompatButton {
                 goalViewY = movementBottom.toFloat()
             }
         }
-        ViewHelper.setTranslationX(v, goalViewX)
-        ViewHelper.setTranslationY(v, goalViewY)
+
+        v.translationX=goalViewX
+        v.translationY=goalViewY
+
     }
 
     private fun getAngle(diffX: Double, diffY: Double): Double {

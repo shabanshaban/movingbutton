@@ -51,6 +51,6 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
-    implementation 'com.nineoldandroids:library:2.4.0+'
+
 
 }

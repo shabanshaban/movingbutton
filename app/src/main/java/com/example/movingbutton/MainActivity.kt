@@ -1,17 +1,19 @@
 package com.example.movingbutton
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.movingbutton.enums.ButtonPosition
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-
+      val movingButton=  findViewById<MovingButton>(R.id.moving_button)
+        movingButton.onPositionChangedListener=object :MovingButton.OnPositionChangedListener{
+            override fun onPositionChanged(action: Int, position: ButtonPosition?) {
+               val positionBtn = position.toString()
+            }
+        }
     }
 }
