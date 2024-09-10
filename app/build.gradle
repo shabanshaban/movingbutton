@@ -41,7 +41,8 @@ dependencies {
     implementation libs.androidx.constraintlayout
 
 
-   // implementation 'com.github.shabanshaban:movingbutton:1.0.2'
+  //  implementation 'com.github.shabanshaban:movingbutton:1.0.3'
+
     implementation project(':movingbutton')
 
 
