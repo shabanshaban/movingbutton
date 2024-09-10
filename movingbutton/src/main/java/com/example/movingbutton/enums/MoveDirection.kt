@@ -1,8 +1,8 @@
-package com.example.movingbutton.enums;
+package com.example.movingbutton.enums
 
 /**
  * Created by TheFinestArtist on 2/12/15.
  */
-public enum MoveDirection {
+enum class MoveDirection {
     ALL, HORIZONTAL_VERTICAL, HORIZONTAL, VERTICAL, STILL
 }
